@@ -36,13 +36,19 @@ import { visuallyHidden } from "@mui/utils"
 import {
   Button,
   Divider,
+  FormControl,
+  Input,
+  InputAdornment,
+  InputLabel,
   List,
   ListItem,
   Tab,
   Tabs,
   TextField,
+  styled,
 } from "@mui/material"
 import axios from "axios"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 function createData(Name, Position, Office, Age, Date, Salary) {
   return {
@@ -358,9 +364,11 @@ export default function Home() {
   )
 
   React.useEffect(() => {
-    localStorage.setItem("TableData", JSON.stringify(TableData))
+    setTimeout(() => {
+      localStorage.setItem("TableData", JSON.stringify(TableData))
+    }, 1000) // Delay time in milliseconds
   }, [TableData])
-  console.log(TableData)
+
   React.useEffect(
     () =>
       async function fetchUser() {
@@ -483,6 +491,41 @@ export default function Home() {
   const handleChangeDense = (event) => {
     setDense(event.target.checked)
   }
+  const StyledTabs = styled((props) => (
+    <Tabs
+      {...props}
+      TabIndicatorProps={{
+        children: <span className="MuiTabs-indicatorSpan" />,
+      }}
+    />
+  ))({
+    "& .MuiTabs-indicator": {
+      display: "flex",
+      justifyContent: "center",
+      backgroundColor: "transparent",
+    },
+    "& .MuiTabs-indicatorSpan": {
+      maxWidth: 50,
+      width: "100%",
+      backgroundColor: "white",
+    },
+  })
+
+  const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+    ({ theme }) => ({
+      textTransform: "none",
+      fontWeight: theme.typography.fontWeightRegular,
+      fontSize: theme.typography.pxToRem(15),
+      marginRight: theme.spacing(1),
+      color: "#fff",
+      "&.Mui-selected": {
+        color: "#fff",
+      },
+      "&.Mui-focusVisible": {
+        backgroundColor: "rgba(100, 95, 228, 0.32)",
+      },
+    })
+  )
 
   const isSelected = (Name) => selected.indexOf(Name) !== -1
   const [viewTab, setViewTab] = React.useState()
@@ -580,7 +623,16 @@ export default function Home() {
         />
       </Box>
       {AddTab && (
-        <Box sx={{ flex: "0.7" }} component="div">
+        <Box
+          sx={{
+            flex: "0.7",
+            height: "90vh",
+            width: "100vw",
+            overflowY: "scroll",
+            display: { xs: "none", sm: "none", lg: "block" },
+          }}
+          component="div"
+        >
           <Box
             sx={{
               display: "flex",
@@ -707,10 +759,9 @@ export default function Home() {
         <Box
           sx={{
             flex: "0.7",
-            padding: "20px 1 0px  20px  0px",
+            height: { sm: "90vh" },
             width: "100%",
             overflowY: "scroll",
-
             display: { xs: "block", sm: "block", lg: "block" },
             position: ViewTabsSm ? "fixed" : null,
             top: "0",
@@ -722,6 +773,7 @@ export default function Home() {
           <Box
             sx={{
               display: "flex",
+              padding: "10px 10px 60px 10px",
             }}
           >
             {/* <Typography
@@ -737,15 +789,25 @@ export default function Home() {
                   justifyContent: "space-between",
                 }}
               >
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Box
+                  sx={{
+                    borderBottom: 1,
+                    borderColor: "divider",
+                    maxWidth: "300px",
+                    overflowX: "scroll",
+                  }}
+                >
                   <Tabs
+                    // sx={{ maxWidth: "300px", overflowX: "scroll" }}
                     value={value}
                     onChange={handleChange}
                     aria-label="basic tabs example"
                   >
-                    <Tab label="Item One" {...a11yProps(0)} />
-                    <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} />
+                    <Tab label="Summary" {...a11yProps(0)} />
+                    <Tab label="Invoice" {...a11yProps(1)} />
+                    <Tab label="Proposals" {...a11yProps(2)} />
+                    <Tab label="Proposals" {...a11yProps(2)} />
+                    <Tab label="Proposals" {...a11yProps(2)} />
                   </Tabs>
                 </Box>
                 <Box sx={{ gap: "10px", display: "flex" }}>
@@ -775,32 +837,64 @@ export default function Home() {
                   </Typography>
                 </Paper>
                 <Paper sx={{ display: "flex", marginTop: "15px" }}>
-                  <Box sx={{ padding: "20px 30px", flex: "1" }}>
-                    <Typography sx={{ fontSize: "14px" }}>
+                  <Box
+                    sx={{
+                      padding: { xs: "20px 20px", lg: "20px 30px" },
+                      flex: "1",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "12px", lg: "14px" } }}
+                    >
                       Net revenue
                     </Typography>
-                    <Typography sx={{ fontSize: "14px" }}>
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "12px", lg: "14px" } }}
+                    >
                       Debt excluded net sales total
                     </Typography>
-                    <Typography sx={{ fontSize: "26px", fontWeight: "700" }}>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "14px", sm: "18px", lg: "26px" },
+                        fontWeight: "700",
+                      }}
+                    >
                       2,0000$
                     </Typography>
-                    <Typography sx={{ fontSize: "14px" }}>
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "12px", lg: "14px" } }}
+                    >
                       These figures here are based on net sales total excluded
                       debt
                     </Typography>
                   </Box>
-                  <Box sx={{ padding: "20px 30px", flex: "1" }}>
-                    <Typography sx={{ fontSize: "14px" }}>
+                  <Box
+                    sx={{
+                      padding: { xs: "20px 20px", lg: "20px 30px" },
+                      flex: "1",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "10px", lg: "14px" } }}
+                    >
                       Net revenue
                     </Typography>
-                    <Typography sx={{ fontSize: "14px" }}>
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "12px", lg: "14px" } }}
+                    >
                       Debt excluded net sales total
                     </Typography>
-                    <Typography sx={{ fontSize: "26px", fontWeight: "700" }}>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "14px", sm: "18px", lg: "26px" },
+                        fontWeight: "700",
+                      }}
+                    >
                       2,0000$
                     </Typography>
-                    <Typography sx={{ fontSize: "14px" }}>
+                    <Typography
+                      sx={{ fontSize: { xs: "10px", sm: "12px", lg: "14px" } }}
+                    >
                       These figures here are based on net sales total excluded
                       debt
                     </Typography>
@@ -821,7 +915,6 @@ export default function Home() {
                         <ListItem>Company Name</ListItem>
                         <ListItem>Name</ListItem>
                         <ListItem>Address</ListItem>
-                        <ListItem></ListItem>
                         <ListItem>VAt number</ListItem>
                         <ListItem>Phone number</ListItem>
                         <ListItem>Customer id</ListItem>
@@ -835,173 +928,6 @@ export default function Home() {
                         <ListItem>-</ListItem>
                         <ListItem>-</ListItem>
                         <ListItem>-</ListItem>
-                        <ListItem>1</ListItem>
-                      </List>
-                    </Box>
-                  </Box>
-                </Paper>
-                <Paper sx={{ marginTop: "15px" }}>
-                  {" "}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: "10px",
-                      // marginBottom: "15px",
-                      padding: "10px 20px",
-                    }}
-                  >
-                    <Typography>Navigation</Typography>
-                  </Box>
-                  <Divider />
-                  <Box sx={{}}>
-                    <List>
-                      <ListItem
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box sx={{ display: "flex", gap: "10px" }}>
-                          {" "}
-                          <HomeIcon />
-                          <Typography>Create Task</Typography>
-                        </Box>
-                        <Typography>2 active</Typography>
-                      </ListItem>
-                      <ListItem
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box sx={{ display: "flex", gap: "10px" }}>
-                          {" "}
-                          <HomeIcon />
-                          <Typography>Create Task</Typography>
-                        </Box>
-                        <Typography>2 active</Typography>
-                      </ListItem>
-                      <ListItem
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box sx={{ display: "flex", gap: "10px" }}>
-                          {" "}
-                          <HomeIcon />
-                          <Typography>Create Task</Typography>
-                        </Box>
-                        <Typography>2 active</Typography>
-                      </ListItem>
-                    </List>
-                  </Box>
-                </Paper>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                Item Two
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                Item Three
-              </TabPanel>
-            </Box>
-          </Box>
-        </Box>
-      )}
-      {ViewTabsSm && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: "0",
-            display: "none",
-            bottom: "0",
-            right: "0",
-            background: "white",
-            maxWidth: "640px",
-          }}
-        >
-          <Box
-            sx={{
-              // flex: "0.7",
-              padding: "20px 30px",
-              width: "100%",
-              overflowY: "scroll",
-              height: "90vh",
-            }}
-          >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography
-                sx={{ fontSize: { sm: "16px", lg: "24px" }, fontWeight: "500" }}
-              >
-                Let's do Business International BV
-              </Typography>
-              <Box sx={{ gap: "10px", display: "flex" }}>
-                <Typography>Edit</Typography>
-                <MoreVertIcon />
-
-                <CloseIcon
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => setViewTab(false)}
-                />
-              </Box>
-            </Box>
-            <Box>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="basic tabs example"
-                >
-                  <Tab label="Item One" {...a11yProps(0)} />
-                  <Tab label="Item Two" {...a11yProps(1)} />
-                  <Tab label="Item Three" {...a11yProps(2)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={value} index={0}>
-                <Paper sx={{ textAlign: "center", padding: "30px 0px" }}>
-                  <Typography
-                    sx={{
-                      fontSize: { sm: "16px", lg: "24px" },
-                      fontWeight: "700",
-                    }}
-                  >
-                    Let's do Business International BV
-                  </Typography>
-                  <Typography>Bert van Duivendijk</Typography>
-                </Paper>
-                <Paper sx={{ marginTop: "15px", padding: "10px 20px" }}>
-                  <Box
-                    sx={{ display: "flex", gap: "10px", marginBottom: "15px" }}
-                  >
-                    <HomeIcon />
-                    <Typography>Contact Info</Typography>
-                  </Box>
-                  <Divider />
-
-                  <Box sx={{ display: "flex" }}>
-                    <Box>
-                      <List>
-                        <ListItem>Company Name</ListItem>
-                        <ListItem>Name</ListItem>
-                        <ListItem>Address</ListItem>
-                        <ListItem></ListItem>
-                        <ListItem>VAt number</ListItem>
-                        <ListItem>Phone number</ListItem>
-                        <ListItem>Customer id</ListItem>
-                      </List>
-                    </Box>
-                    <Box>
-                      <List>
-                        <ListItem>Let's do Business International BV</ListItem>
-                        <ListItem>Let's do Business International BV</ListItem>
-                        <ListItem>Let's do Business International BV</ListItem>
-                        <ListItem>-</ListItem>
-                        <ListItem>-</ListItem>
-                        <ListItem>-</ListItem>
-                        <ListItem>1</ListItem>
                       </List>
                     </Box>
                   </Box>
@@ -1012,8 +938,8 @@ export default function Home() {
                     sx={{
                       display: "flex",
                       gap: "10px",
-                      marginBottom: "15px",
-                      padding: "20px 20px",
+                      // marginBottom: "15px",
+                      padding: "10px 20px",
                     }}
                   >
                     <Typography>Navigation</Typography>
@@ -1075,6 +1001,263 @@ export default function Home() {
               </TabPanel>
             </Box>
           </Box>
+        </Box>
+      )}
+      {ViewTabsSm && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: "0",
+            bottom: "0",
+            right: "0",
+            left: "0",
+            width: "100%",
+            background: "#F5F5F5",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "40px 30px",
+              justifyContent: "space-between",
+              background: "#1975D2",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <svg
+                width="7"
+                height="13"
+                viewBox="0 0 7 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.6129 12.7427L0.177419 6.98021C0.112903 6.91161 0.0673117 6.83729 0.040645 6.75726C0.0135482 6.67722 0 6.59147 0 6.5C0 6.40853 0.0135482 6.32278 0.040645 6.24274C0.0673117 6.16271 0.112903 6.08839 0.177419 6.01979L5.6129 0.240105C5.76344 0.0800351 5.95161 0 6.17742 0C6.40323 0 6.59677 0.085752 6.75806 0.257256C6.91935 0.42876 7 0.628848 7 0.85752C7 1.08619 6.91935 1.28628 6.75806 1.45778L2.01613 6.5L6.75806 11.5422C6.9086 11.7023 6.98387 11.8994 6.98387 12.1336C6.98387 12.3682 6.90323 12.5712 6.74194 12.7427C6.58065 12.9142 6.39247 13 6.17742 13C5.96237 13 5.77419 12.9142 5.6129 12.7427Z"
+                  fill="white"
+                />
+              </svg>
+              <Typography sx={{ color: "white" }}>New client</Typography>
+            </Box>
+            <Box>
+              <Typography sx={{ color: "white" }}>Save</Typography>
+            </Box>
+          </Box>
+          <Box sx={{ background: "#1975D2" }}>
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                // maxWidth: "300px",
+                overflowX: "scroll",
+              }}
+            >
+              <StyledTabs
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                value={value}
+                onChange={handleChange}
+              >
+                <StyledTab label="Details" />
+                <StyledTab label="Contacts" />
+                <StyledTab label="Notes" />
+                <StyledTab label="Settings" />
+                <StyledTab label="Billing address" />
+              </StyledTabs>
+            </Box>
+          </Box>
+          <TabPanel value={value} index={0}>
+            <Box
+              sx={{ background: "#F5F5F5", width: "100%", padding: "0", m: 0 }}
+            >
+              <Box
+                sx={{
+                  background: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mx: "auto",
+                  width: "90%",
+                  padding: "10px 20px 20px 20px",
+                  flexDirection: "column",
+                  rowGap: "20px",
+                  borderRadius: "10px",
+                }}
+              >
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-First Name"
+                  >
+                    First Name
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-First Name"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle First Name visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-Last Name"
+                  >
+                    Last Name
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Last Name"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Last Name visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel sx={{ mb: 6 }} htmlFor="standard-adornment-Email">
+                    Email
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Email"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Email visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel sx={{ mb: 6 }} htmlFor="standard-adornment-Phone">
+                    Phone
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Phone"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Phone visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-Currency"
+                  >
+                    Currency
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Currency"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Currency visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-Language"
+                  >
+                    Language
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Language"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Language visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-Invoice payment"
+                  >
+                    Invoice payment
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Invoice payment"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Invoice payment visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  sx={{ width: "100%", m: "4px 20px" }}
+                  variant="standard"
+                >
+                  <InputLabel
+                    sx={{ mb: 6 }}
+                    htmlFor="standard-adornment-Quote Valid Until payment"
+                  >
+                    Quote Valid Until payment
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-Quote Valid Until payment"
+                    type="text"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle Quote Valid Until payment visibility">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Box>
+            </Box>
+          </TabPanel>
         </Box>
       )}
       <Box

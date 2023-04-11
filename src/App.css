@@ -1,11 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+* {
+  font-family: "Inter", sans-serif;
+}
+
+.smooth-trasition {
+  transition: all 0.3s ease;
+}
 .hoveronsidebar:hover {
   background: #d8d0d0;
 }
 .hoveronsidebar {
   padding: 10px;
   border-radius: 7px;
-}
-
-.smooth-trasition {
-  transition: all 0.3s ease;
 }
